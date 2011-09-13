@@ -1,0 +1,27 @@
+<style type="text/css">
+</style>
+
+<h2><%= l(:myprojects) %></h2>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th><%= l(:label_project) %></th>
+      <th>発注日</th>
+      <th>納品日</th>
+      <th>見積 (h)</th>
+      <th>計画 (h)</th>
+      <th>実績 (h)</th>
+      <th>見積計画比 (%)</th>
+      <th>見積実績比 (%)</th>
+      <th>計画実績比 (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @projects.each do |project| %>
+      <%= make_send_body(project) %>
+    <% end %>
+  </tbody>
+</table>
+
+<% html_title l(:myprojects) %>

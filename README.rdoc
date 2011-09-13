@@ -1,0 +1,3 @@
+= Redmine My Projects Plugin
+
+Description goes here
