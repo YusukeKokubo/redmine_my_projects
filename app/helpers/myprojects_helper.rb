@@ -41,12 +41,12 @@ module MyprojectsHelper
       <td><a href=\"#{Setting.protocol}://#{Setting.host_name}/yojitsu/show/#{project.identifier}\">#{project.name}</a></td>
       <td>#{project.custom_values[5].value if project.custom_values[5]}</td>
       <td>#{project.custom_values[6].value if project.custom_values[6]}</td>
-      <td>#{l_hour(total_rfp_hours)}</td>
-      <td>#{l_hour(total_estimated_hours)}</td>
-      <td>#{l_hour(total_spent_hours)}</td>
-      <td class="#{class_estimated_vs_rfp}">#{l_hour(rate_estimated_vs_rfp)}</td>
-      <td class="#{class_spent_vs_rfp}">#{l_hour(rate_spent_vs_rfp)}</td>
-      <td>#{l_hour(rate_spent_vs_estimated)}</td>
+      <td class="hour">#{l_hour(total_rfp_hours)}</td>
+      <td class="hour">#{l_hour(total_estimated_hours)}</td>
+      <td class="hour">#{l_hour(total_spent_hours)}</td>
+      <td class="hour #{class_estimated_vs_rfp}">#{l_hour(rate_estimated_vs_rfp)}</td>
+      <td class="hour #{class_spent_vs_rfp}">#{l_hour(rate_spent_vs_rfp)}</td>
+      <td class="hour">#{l_hour(rate_spent_vs_estimated)}</td>
     </tr>
     EOF
   end
