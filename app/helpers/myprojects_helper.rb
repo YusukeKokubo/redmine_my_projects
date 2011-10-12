@@ -23,6 +23,25 @@ module MyprojectsHelper
       next sum unless sprint.spent_hours
       sum + sprint.spent_hours
     end
+    
+    # add backlog hours to estimated and spent hours
+    backlog = RbStory.product_backlog(project)
+    backlog.each do |task|
+      total_estimated_hours += task.initial_estimate if task.initial_estimate
+      total_spent_hours += task.spent_hours if task.spent_hours
+    end
+        
+    issue_trackers = project.trackers.all.delete_if {|t| t.id == RbTask.tracker or RbStory.trackers.include?(t.id) }
+    issues = RbStory.find(
+                     :all, 
+                     :conditions => ["project_id=? AND tracker_id in (?)", project, issue_trackers],
+                     :order => "position ASC"
+                    )
+
+    total_spent_hours += issues.inject(0.0) do |sum, issue|
+      next sum unless issue.spent_hours
+      sum + issue.spent_hours
+    end
 
     rate_estimated_vs_rfp   = total_estimated_hours / total_rfp_hours * 100
     rate_spent_vs_rfp       = total_spent_hours     / total_rfp_hours * 100
