@@ -38,7 +38,7 @@ module MyprojectsHelper
 
     <<-EOF
     <tr class="#{cycle 'odd', 'even'}">
-      <td><a href=\"#{Setting.protocol}://#{Setting.host_name}/yojitsu/show/#{project.identifier}\">#{project.name}</a></td>
+      <td>#{link_to_project(project)}</a></td>
       <td>#{project.custom_values[5].value if project.custom_values[5]}</td>
       <td>#{project.custom_values[6].value if project.custom_values[6]}</td>
       <td class="hour">#{l_hour(total_rfp_hours)}</td>
