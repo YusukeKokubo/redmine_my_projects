@@ -27,7 +27,7 @@ module MyprojectsHelper
     # add backlog hours to estimated and spent hours
     backlog = RbStory.product_backlog(project)
     backlog.each do |task|
-      total_estimated_hours += task.initial_estimate if task.initial_estimate
+      total_estimated_hours += task.estimated_hours if task.estimated_hours
       total_spent_hours += task.spent_hours if task.spent_hours
     end
         
