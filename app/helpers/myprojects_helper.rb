@@ -12,44 +12,10 @@ module MyprojectsHelper
     # rfp hours
     total_rfp_hours = project.custom_values[0] ? project.custom_values[0].to_s.to_f : 0.0
 
-    # estimated hours
-    total_estimated_hours = sprints.inject(0.0) do |sum, sprint|
-      next sum unless sprint.estimated_hours
-      sum + sprint.estimated_hours
-    end
+    cond = project.project_condition(Setting.display_subprojects_issues?)
+    total_spent_hours = TimeEntry.visible.sum(:hours, :include => :project, :conditions => cond).to_f
 
-    # spent hours
-    total_spent_hours = sprints.inject(0.0) do |sum, sprint|
-      next sum unless sprint.spent_hours
-      sum + sprint.spent_hours
-    end
-    
-    # add backlog hours to estimated and spent hours
-    backlog = RbStory.product_backlog(project)
-    backlog.each do |task|
-      total_estimated_hours += task.estimated_hours if task.estimated_hours
-      total_spent_hours += task.spent_hours if task.spent_hours
-    end
-        
-    issue_trackers = project.trackers.all.delete_if {|t| t.id == RbTask.tracker or RbStory.trackers.include?(t.id) }
-    issues = RbStory.find(
-                     :all, 
-                     :conditions => ["project_id=? AND tracker_id in (?)", project, issue_trackers],
-                     :order => "position ASC"
-                    )
-
-    total_spent_hours += issues.inject(0.0) do |sum, issue|
-      next sum unless issue.spent_hours
-      sum + issue.spent_hours
-    end
-
-    rate_estimated_vs_rfp   = total_estimated_hours / total_rfp_hours * 100
     rate_spent_vs_rfp       = total_spent_hours     / total_rfp_hours * 100
-    rate_spent_vs_estimated = total_spent_hours     / total_estimated_hours * 100
-
-    class_estimated_vs_rfp = "normal"
-    class_estimated_vs_rfp = "overtime" if rate_estimated_vs_rfp > 100.0
-    class_estimated_vs_rfp = "noplan"   if rate_estimated_vs_rfp.infinite?
 
     class_spent_vs_rfp = "normal"
     class_spent_vs_rfp = "overtime" if rate_spent_vs_rfp > 100.0
@@ -61,11 +27,8 @@ module MyprojectsHelper
       <td>#{project.custom_values[5].value if project.custom_values[5]}</td>
       <td>#{project.custom_values[6].value if project.custom_values[6]}</td>
       <td class="hour">#{l_hour(total_rfp_hours)}</td>
-      <td class="hour">#{l_hour(total_estimated_hours)}</td>
       <td class="hour">#{l_hour(total_spent_hours)}</td>
-      <td class="hour #{class_estimated_vs_rfp}">#{l_hour(rate_estimated_vs_rfp)}</td>
       <td class="hour #{class_spent_vs_rfp}">#{l_hour(rate_spent_vs_rfp)}</td>
-      <td class="hour">#{l_hour(rate_spent_vs_estimated)}</td>
     </tr>
     EOF
   end
