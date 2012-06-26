@@ -1,7 +1,7 @@
 require 'redmine'
 
-Redmine::Plugin.register :redmine_my_projects_plugin do
-  name 'Redmine MyProjects Plugin plugin'
+Redmine::Plugin.register :redmine_my_projects do
+  name 'Redmine MyProjects Plugin'
   author 'Yusuke Kokubo'
   description 'This is a plugin for Redmine.'
   version '0.0.1'

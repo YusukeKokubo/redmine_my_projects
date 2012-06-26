@@ -31,6 +31,7 @@ module MyprojectsHelper
       <td class="hour #{class_spent_vs_rfp}">#{l_hour(rate_spent_vs_rfp)}</td>
     </tr>
     EOF
+    .html_safe
   end
 
   def l_hour(hour)
